@@ -80,10 +80,6 @@ public class ChatClient extends JFrame implements Runnable
 
 
 
-
-
-
-
 		JLabel lbl1 = new JLabel("Room Messages");
 		JLabel lbl2 = new JLabel("Your Rooms");
 		JLabel lbl3 = new JLabel("Online Users");

@@ -42,7 +42,7 @@ public class ChatDaemon implements Runnable
 	{
 		ServerSocket ss=new ServerSocket(portNumber);
 		Socket chatSocket=null;
-		System.out.println("Chat Server by Vish listening for connections..");
+		System.out.println("Chat Server listening for connections..");
 		while(true)
 		{
 			chatSocket=ss.accept();
@@ -76,8 +76,7 @@ public class ChatDaemon implements Runnable
 		while (true)
 		{
 			String mes=shrMsg.get();
-//			if (mes.charAt(0)!='d')
-//				System.out.println("Daemon got:"+mes);
+
 			if (mes.charAt(0)=='m') // message
 			{
 				StringTokenizer t= new StringTokenizer(mes);
