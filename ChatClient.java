@@ -6,7 +6,7 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-
+//changed by josef
 public class ChatClient extends JFrame implements Runnable 
 {
 	Socket socket;
