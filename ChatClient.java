@@ -26,6 +26,7 @@ public class ChatClient extends JFrame implements Runnable
 	JList lstCurrent;
 	JTextField txtSend;
 	boolean active;
+
 	
 	public static void main(String[] argv) throws IOException
 	{
@@ -256,7 +257,7 @@ public class ChatClient extends JFrame implements Runnable
 			Room roomToGo=(Room)lstRooms.getSelectedValue();
 			currentRoom=roomToGo;
 			txtMessages.setText(roomToGo.message);
-			setTitle("Chat Client - "+myName+" in "+currentRoom.roomName);
+			setTitle("Chat Client - "+myName+" in " + currentRoom.roomName);
 		}
 	}
 
@@ -291,19 +292,23 @@ public class ChatClient extends JFrame implements Runnable
 			else if(e.getActionCommand().equals("Create"))
 			{
 				int[] selections=lstUsers.getSelectedIndices();
+
 				if (selections.length==0)
 				{
 					JOptionPane.showMessageDialog(null,"Please select users in the room using Cntrl key.","Chat Client - "+myName,JOptionPane.ERROR_MESSAGE);					
 					return;
 				}
 				String inviteMessage="";
-				for(int i=0;i<selections.length;i++)
+				for(int i=0;i<selections.length;i++){
+					currentUsersModel.addElement((String)onlineUsers.elementAt(selections[i]));
 					inviteMessage += " "+(String)onlineUsers.elementAt(selections[i]);
+				}
 				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+myName,JOptionPane.QUESTION_MESSAGE);
 				if (roomName==null)
 					return;
 				if (roomName=="")
 					roomName="Unnamed";
+
 				inviteMessage = "v "+roomName+" "+myName+inviteMessage;				
 				output.println(inviteMessage);
 				System.out.println("Client sent: "+inviteMessage);
