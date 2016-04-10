@@ -16,6 +16,7 @@ public class ChatClient extends JFrame implements Runnable
 	DefaultListModel onlineUsers = new DefaultListModel();
 	DefaultListModel currentUsersModel = new DefaultListModel();
 	String myName;
+	String myPassword;
 
 	BufferedReader input;
 	PrintStream output;
@@ -154,6 +155,10 @@ public class ChatClient extends JFrame implements Runnable
 		setLocation(500,250);
 		setVisible(true);
 		myName = JOptionPane.showInputDialog(null,"Enter your Name:","Chat Client",JOptionPane.QUESTION_MESSAGE);
+		
+		//password input field
+		//myPassword = JOptionPane.showInputDialog(null,"Enter you Password:","Chat Client",JOptionPane.QUESTION_MESSAGE);
+
 		if (myName==null || myName.equals(""))
 			myName="Anonymous";
 		lbl4.setText("Currently connected as: " + myName);
