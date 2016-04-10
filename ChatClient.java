@@ -14,6 +14,7 @@ public class ChatClient extends JFrame implements Runnable
 	Room currentRoom=null;
 	DefaultListModel myRooms = new DefaultListModel();
 	DefaultListModel onlineUsers = new DefaultListModel();
+	DefaultListModel currentUsersModel = new DefaultListModel();
 	String myName;
 
 	BufferedReader input;
@@ -22,6 +23,7 @@ public class ChatClient extends JFrame implements Runnable
 	JTextArea txtMessages;
 	JList lstRooms;
 	JList lstUsers;
+	JList lstCurrent;
 	JTextField txtSend;
 	boolean active;
 	
@@ -88,6 +90,7 @@ public class ChatClient extends JFrame implements Runnable
 		JLabel lbl2 = new JLabel("Your Rooms");
 		JLabel lbl3 = new JLabel("Online Users");
 		JLabel lbl4 = new JLabel("");
+		JLabel lbl5 = new JLabel("Users in Room");
 		lbl4.setVisible(false);
 		txtMessages = new JTextArea();
 		txtMessages.setEditable(false);
@@ -105,10 +108,15 @@ public class ChatClient extends JFrame implements Runnable
 		lstUsers=new JList(onlineUsers);
 		JScrollPane sclUsers = new JScrollPane(lstUsers);
 		sclUsers.setPreferredSize(new Dimension(100, 250));
+		
+		
+        lstCurrent = new JList(currentUsersModel);
+        JScrollPane sclCurrent = new JScrollPane(lstCurrent);
+        sclCurrent.setPreferredSize(new Dimension(100,250));
 
 		txtSend = new JTextField(20);
 		JButton btnSend = new JButton("Send");
-		JButton btnCreate = new JButton("Invite users to a new Room");
+		JButton btnCreate = new JButton("Create Room");
 		btnSend.setActionCommand("Send");
 		btnCreate.setActionCommand("Create");
 		MyActionListener listener=new MyActionListener();
@@ -119,20 +127,19 @@ public class ChatClient extends JFrame implements Runnable
 
 		GriddedPanel mainPanel = new GriddedPanel();
 		mainPanel.setBorder( new EmptyBorder( new Insets( 2, 2, 2, 2 ) ) );
-    	mainPanel.addComponent(lbl1,		1,0,5,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(lbl2,		1,5,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(lbl3,		1,6,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(lbl4,		0,0,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(sclMessages,	2,0,5,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
-    	mainPanel.addComponent(sclRooms,	2,5,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
-    	mainPanel.addComponent(sclUsers,	2,6,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
-    	mainPanel.addComponent(txtSend,		5,0,4,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
-    	mainPanel.addComponent(btnSend,		5,4,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
-    	mainPanel.addComponent(btnCreate,	5,5,2,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
-		getContentPane().add( BorderLayout.CENTER, mainPanel );
-		
-
-
+        mainPanel.addComponent(lbl1,        1,0,5,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+        mainPanel.addComponent(lbl2,        1,6,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+        mainPanel.addComponent(lbl3,        1,7,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+        mainPanel.addComponent(lbl4,        0,0,1,1, GridBagConstraints.WEST,GridBagConstraints.NONE);
+		mainPanel.addComponent(lbl5,        1,5,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+        mainPanel.addComponent(sclMessages, 2,0,5,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+        mainPanel.addComponent(sclRooms,    2,6,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+        mainPanel.addComponent(sclUsers,    2,7,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+        mainPanel.addComponent(sclCurrent,  2,5,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+        mainPanel.addComponent(txtSend,     5,0,5,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+        mainPanel.addComponent(btnSend,     5,5,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+        mainPanel.addComponent(btnCreate,   5,6,2,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+        getContentPane().add( BorderLayout.CENTER, mainPanel );
 		WindowListener wndCloser = new WindowAdapter()
 		{
 			public void	windowClosing(WindowEvent e)
