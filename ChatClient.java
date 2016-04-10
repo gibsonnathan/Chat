@@ -77,10 +77,18 @@ public class ChatClient extends JFrame implements Runnable
 		}
 
 		System.out.println("Connected....starting GUI...");
+
+
+
+
+
+
+
 		JLabel lbl1 = new JLabel("Room Messages");
 		JLabel lbl2 = new JLabel("Your Rooms");
 		JLabel lbl3 = new JLabel("Online Users");
-
+		JLabel lbl4 = new JLabel("");
+		lbl4.setVisible(false);
 		txtMessages = new JTextArea();
 		txtMessages.setEditable(false);
 		txtMessages.setLineWrap(true);
@@ -107,18 +115,24 @@ public class ChatClient extends JFrame implements Runnable
 		btnSend.addActionListener(listener);
 		btnCreate.addActionListener(listener);
 
+
+
 		GriddedPanel mainPanel = new GriddedPanel();
 		mainPanel.setBorder( new EmptyBorder( new Insets( 2, 2, 2, 2 ) ) );
-    	mainPanel.addComponent(lbl1,		0,0,5,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(lbl2,		0,5,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(lbl3,		0,6,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
-    	mainPanel.addComponent(sclMessages,	1,0,5,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
-    	mainPanel.addComponent(sclRooms,	1,5,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
-    	mainPanel.addComponent(sclUsers,	1,6,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
-    	mainPanel.addComponent(txtSend,		4,0,4,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
-    	mainPanel.addComponent(btnSend,		4,4,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
-    	mainPanel.addComponent(btnCreate,	4,5,2,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+    	mainPanel.addComponent(lbl1,		1,0,5,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+    	mainPanel.addComponent(lbl2,		1,5,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+    	mainPanel.addComponent(lbl3,		1,6,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+    	mainPanel.addComponent(lbl4,		0,0,1,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
+    	mainPanel.addComponent(sclMessages,	2,0,5,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+    	mainPanel.addComponent(sclRooms,	2,5,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+    	mainPanel.addComponent(sclUsers,	2,6,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
+    	mainPanel.addComponent(txtSend,		5,0,4,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+    	mainPanel.addComponent(btnSend,		5,4,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+    	mainPanel.addComponent(btnCreate,	5,5,2,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
 		getContentPane().add( BorderLayout.CENTER, mainPanel );
+		
+
+
 		WindowListener wndCloser = new WindowAdapter()
 		{
 			public void	windowClosing(WindowEvent e)
@@ -130,6 +144,8 @@ public class ChatClient extends JFrame implements Runnable
 				System.exit(1);
 			}
 		};
+
+
 		addWindowListener( wndCloser );
 		pack();
 		setLocation(500,250);
@@ -137,6 +153,8 @@ public class ChatClient extends JFrame implements Runnable
 		myName = JOptionPane.showInputDialog(null,"Enter your Name:","Chat Client",JOptionPane.QUESTION_MESSAGE);
 		if (myName==null || myName.equals(""))
 			myName="Anonymous";
+		lbl4.setText("Currently connected as: " + myName);
+		lbl4.setVisible(true);
 		output.println("i "+myName);
 		setTitle("Chat Client - "+myName+" currently not in any room");
 		active=true;
