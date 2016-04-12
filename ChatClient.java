@@ -115,11 +115,14 @@ public class ChatClient extends JFrame implements Runnable
 		txtSend = new JTextField(20);
 		JButton btnSend = new JButton("Send");
 		JButton btnCreate = new JButton("Create Room");
+		JButton btnInstruction = new JButton("Instructions");
+		btnInstruction.setActionCommand("Instruction");
 		btnSend.setActionCommand("Send");
 		btnCreate.setActionCommand("Create");
 		MyActionListener listener=new MyActionListener();
 		btnSend.addActionListener(listener);
 		btnCreate.addActionListener(listener);
+		btnInstruction.addActionListener(listener);
 
 
 
@@ -136,7 +139,8 @@ public class ChatClient extends JFrame implements Runnable
         mainPanel.addComponent(sclCurrent,  2,5,1,3,GridBagConstraints.WEST,GridBagConstraints.BOTH);
         mainPanel.addComponent(txtSend,     5,0,5,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
         mainPanel.addComponent(btnSend,     5,5,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
-        mainPanel.addComponent(btnCreate,   5,6,2,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+        mainPanel.addComponent(btnCreate,   5,6,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
+		mainPanel.addComponent(btnInstruction,   5,7,1,1,GridBagConstraints.WEST,GridBagConstraints.HORIZONTAL);
         getContentPane().add( BorderLayout.CENTER, mainPanel );
 		WindowListener wndCloser = new WindowAdapter()
 		{
@@ -300,7 +304,7 @@ public class ChatClient extends JFrame implements Runnable
 
 				if (selections.length==0)
 				{
-					JOptionPane.showMessageDialog(null,"Please select users in the room using Cntrl key.","Chat Client - "+myName,JOptionPane.ERROR_MESSAGE);					
+					JOptionPane.showMessageDialog(null,"Please select users in the room using Ctrl key.","Chat Client - "+myName,JOptionPane.ERROR_MESSAGE);					
 					return;
 				}
 				String inviteMessage="";
@@ -317,6 +321,11 @@ public class ChatClient extends JFrame implements Runnable
 				inviteMessage = "v "+roomName+" "+myName+inviteMessage;				
 				output.println(inviteMessage);
 				System.out.println("Client sent: "+inviteMessage);
+			}
+			else if(e.getActionCommand().equals("Instruction")){
+				JOptionPane.showMessageDialog(null,"Use 'ctrl' key to select multiple users to add to a chat.","Chat Client - "+myName,JOptionPane.QUESTION_MESSAGE);					
+					return;
+			
 			}
 		}
 	}
