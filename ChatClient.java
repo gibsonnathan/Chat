@@ -15,7 +15,7 @@ public class ChatClient extends JFrame implements Runnable
 	DefaultListModel myRooms = new DefaultListModel();
 	DefaultListModel onlineUsers = new DefaultListModel();
 	DefaultListModel currentUsersModel = new DefaultListModel();
-	String myName;
+	
 	String myPassword;
 
 	BufferedReader input;
@@ -26,6 +26,8 @@ public class ChatClient extends JFrame implements Runnable
 	JList lstUsers;
 	JList lstCurrent;
 	JTextField txtSend;
+	JTextField userNameTxt = new JTextField(10);
+	JPasswordField passwordTxt = new JPasswordField(10);
 	boolean active;
 
 	
@@ -83,12 +85,25 @@ public class ChatClient extends JFrame implements Runnable
 		System.out.println("Connected....starting GUI...");
 
 
-
+		
 		JLabel lbl1 = new JLabel("Room Messages");
 		JLabel lbl2 = new JLabel("Your Rooms");
 		JLabel lbl3 = new JLabel("Online Users");
 		JLabel lbl4 = new JLabel("");
 		JLabel lbl5 = new JLabel("Users in Room");
+		
+		
+		
+		JPanel logInPanel = new JPanel();
+
+		
+		logInPanel.add(new JLabel("Username:"));
+		logInPanel.add(userNameTxt);
+		logInPanel.add(Box.createHorizontalStrut(15));
+		logInPanel.add(new JLabel("Password: "));
+		logInPanel.add(passwordTxt);
+		
+		
 		lbl4.setVisible(false);
 		txtMessages = new JTextArea();
 		txtMessages.setEditable(false);
@@ -149,7 +164,7 @@ public class ChatClient extends JFrame implements Runnable
 				JFrame f=(JFrame)e.getSource();
 				f.dispose();
 				active=false;
-				output.println("o "+myName);
+				output.println("o "+userNameTxt.getText());
 				System.exit(1);
 			}
 		};
@@ -159,17 +174,20 @@ public class ChatClient extends JFrame implements Runnable
 		pack();
 		setLocation(500,250);
 		setVisible(true);
-		myName = JOptionPane.showInputDialog(null,"Enter your Name:","Chat Client",JOptionPane.QUESTION_MESSAGE);
+		
+		
+		
+		JOptionPane.showConfirmDialog(null,logInPanel,"Chat Client",JOptionPane.OK_CANCEL_OPTION);
 		
 		//password input field
 		//myPassword = JOptionPane.showInputDialog(null,"Enter you Password:","Chat Client",JOptionPane.QUESTION_MESSAGE);
 
-		if (myName==null || myName.equals(""))
-			myName="Anonymous";
-		lbl4.setText("Currently connected as: " + myName);
+		if (userNameTxt.getText()==null || userNameTxt.getText().equals(""))
+			userNameTxt.setText("Anonymous");
+		lbl4.setText("Currently connected as: " + userNameTxt.getText());
 		lbl4.setVisible(true);
-		output.println("i "+myName);
-		setTitle("Chat Client - "+myName+" currently not in any room");
+		output.println("i "+userNameTxt.getText());
+		setTitle("Chat Client - "+userNameTxt.getText()+" currently not in any room");
 		active=true;
 		Thread readThread=new Thread(this);
 		readThread.start();
@@ -204,9 +222,9 @@ public class ChatClient extends JFrame implements Runnable
 			switch(line.charAt(0))
 			{
 				case 'i': // a user logged in
-					if (!myName.equals(line.substring(2)))
+					if (!userNameTxt.getText().equals(line.substring(2)))
 					{
-						JOptionPane.showMessageDialog(null,line.substring(2) + " logged in","Chat Client - " + myName,JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,line.substring(2) + " logged in","Chat Client - " + userNameTxt.getText(),JOptionPane.INFORMATION_MESSAGE);
 						onlineUsers.addElement(line.substring(2));
 					}
 					break;
@@ -217,7 +235,7 @@ public class ChatClient extends JFrame implements Runnable
 							onlineUsers.removeElementAt(i);
 							break;
 						}
-					JOptionPane.showMessageDialog(null,line.substring(2) + " logged out","Chat Client - " + myName,JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null,line.substring(2) + " logged out","Chat Client - " + userNameTxt.getText(),JOptionPane.INFORMATION_MESSAGE);
 					break;
 				case 'm': // new message
 					t= new StringTokenizer(line);
@@ -240,9 +258,9 @@ public class ChatClient extends JFrame implements Runnable
 					newRoom.roomId=Integer.parseInt(t.nextToken());
 					newRoom.roomName=t.nextToken();
 					newRoom.message=host+" created the room\n";
-					if (!host.equals(myName))
+					if (!host.equals(userNameTxt.getText()))
 					{
-						int n = JOptionPane.showConfirmDialog(null,host+" has invited you to the room with name \""+newRoom.roomName+"\". Do you want to enter?","Chat Client - "+myName,JOptionPane.YES_NO_OPTION);
+						int n = JOptionPane.showConfirmDialog(null,host+" has invited you to the room with name \""+newRoom.roomName+"\". Do you want to enter?","Chat Client - "+userNameTxt.getText(),JOptionPane.YES_NO_OPTION);
 						if (n!=0)
 							continue;
 					}
@@ -266,7 +284,7 @@ public class ChatClient extends JFrame implements Runnable
 			Room roomToGo=(Room)lstRooms.getSelectedValue();
 			currentRoom=roomToGo;
 			txtMessages.setText(roomToGo.message);
-			setTitle("Chat Client - "+myName+" in " + currentRoom.roomName);
+			setTitle("Chat Client - "+userNameTxt.getText()+" in " + currentRoom.roomName);
 		}
 	}
 
@@ -291,10 +309,10 @@ public class ChatClient extends JFrame implements Runnable
 			{
 				if (currentRoom==null)
 				{
-					JOptionPane.showMessageDialog(null,"You are currently not in any room. Create one or wait for another user to invite you.","Chat Client - "+myName,JOptionPane.INFORMATION_MESSAGE);					
+					JOptionPane.showMessageDialog(null,"You are currently not in any room. Create one or wait for another user to invite you.","Chat Client - "+userNameTxt.getText(),JOptionPane.INFORMATION_MESSAGE);					
 					return;
 				}
-				output.println("m "+currentRoom.roomId+" "+myName+": "+txtSend.getText());
+				output.println("m "+currentRoom.roomId+" "+userNameTxt.getText()+": "+txtSend.getText());
 				System.out.println("Client sent: m "+currentRoom.roomId+" "+txtSend.getText());
 				txtSend.setText("");
 			}
@@ -304,7 +322,7 @@ public class ChatClient extends JFrame implements Runnable
 
 				if (selections.length==0)
 				{
-					JOptionPane.showMessageDialog(null,"Please select users in the room using Ctrl key.","Chat Client - "+myName,JOptionPane.ERROR_MESSAGE);					
+					JOptionPane.showMessageDialog(null,"Please select users in the room using Ctrl key.","Chat Client - "+userNameTxt.getText(),JOptionPane.ERROR_MESSAGE);					
 					return;
 				}
 				String inviteMessage="";
@@ -312,18 +330,18 @@ public class ChatClient extends JFrame implements Runnable
 					currentUsersModel.addElement((String)onlineUsers.elementAt(selections[i]));
 					inviteMessage += " "+(String)onlineUsers.elementAt(selections[i]);
 				}
-				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+myName,JOptionPane.QUESTION_MESSAGE);
+				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);
 				if (roomName==null)
 					return;
 				if (roomName=="")
 					roomName="Unnamed";
 
-				inviteMessage = "v "+roomName+" "+myName+inviteMessage;				
+				inviteMessage = "v "+roomName+" "+userNameTxt.getText()+inviteMessage;				
 				output.println(inviteMessage);
 				System.out.println("Client sent: "+inviteMessage);
 			}
 			else if(e.getActionCommand().equals("Instruction")){
-				JOptionPane.showMessageDialog(null,"Use 'ctrl' key to select multiple users to add to a chat.","Chat Client - "+myName,JOptionPane.QUESTION_MESSAGE);					
+				JOptionPane.showMessageDialog(null,"Use 'ctrl' key to select multiple users to add to a chat.","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);					
 					return;
 			
 			}
