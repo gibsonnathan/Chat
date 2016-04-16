@@ -179,9 +179,15 @@ public class ChatClient extends JFrame implements Runnable
 		
 		JOptionPane.showConfirmDialog(null,logInPanel,"Chat Client",JOptionPane.OK_CANCEL_OPTION);
 		
-		//password input field
-		//myPassword = JOptionPane.showInputDialog(null,"Enter you Password:","Chat Client",JOptionPane.QUESTION_MESSAGE);
-
+ 		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+		{
+			JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showConfirmDialog(null,logInPanel,"Chat Client",JOptionPane.OK_CANCEL_OPTION);
+	
+		}	
+			
+			
+		
 		if (userNameTxt.getText()==null || userNameTxt.getText().equals(""))
 			userNameTxt.setText("Anonymous");
 		lbl4.setText("Currently connected as: " + userNameTxt.getText());
