@@ -278,6 +278,13 @@ public class ChatClient extends JFrame implements Runnable
 					while (t.hasMoreTokens())
 						onlineUsers.addElement(t.nextToken());
 					break;
+				case 'x':
+					t= new StringTokenizer(line);
+					t.nextToken();
+					while(t.hasMoreTokens()){
+						currentUsersModel.addElement(t.nextToken());
+					}
+					break;
 				default:
 			}
 		}
@@ -332,9 +339,10 @@ public class ChatClient extends JFrame implements Runnable
 					return;
 				}
 				String inviteMessage="";
+				String members = "";
 				for(int i=0;i<selections.length;i++){
-					currentUsersModel.addElement((String)onlineUsers.elementAt(selections[i]));
 					inviteMessage += " "+(String)onlineUsers.elementAt(selections[i]);
+					members += inviteMessage;
 				}
 				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);
 				if (roomName==null)
@@ -342,8 +350,10 @@ public class ChatClient extends JFrame implements Runnable
 				if (roomName=="")
 					roomName="Unnamed";
 
+				members = "x " + members;
 				inviteMessage = "v "+roomName+" "+userNameTxt.getText()+inviteMessage;				
 				output.println(inviteMessage);
+				output.println(members);
 				System.out.println("Client sent: "+inviteMessage);
 			}
 			else if(e.getActionCommand().equals("Instruction")){

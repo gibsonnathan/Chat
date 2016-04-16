@@ -84,6 +84,9 @@ public class ChatServer implements Runnable
 					case 'v': // invite
 						daemon.createNewRoom(line);
 						break;
+					case 'x':
+						daemon.shrMsg.put(line);
+						break;
 					default:
 				}
 			}
