@@ -28,6 +28,11 @@ public class ChatClient extends JFrame implements Runnable
 	JTextField txtSend;
 	JTextField userNameTxt = new JTextField(10);
 	JPasswordField passwordTxt = new JPasswordField(10);
+	JTextField signUpUserNameTxt = new JTextField(10);
+	JPasswordField signUpPasswordTxt = new JPasswordField(10);
+	JLabel lbl4 = new JLabel("");
+	JPanel logInPanel = new JPanel();
+
 	boolean active;
 
 	
@@ -85,25 +90,30 @@ public class ChatClient extends JFrame implements Runnable
 		System.out.println("Connected....starting GUI...");
 
 
+		Object[] options = {"Sign In","Sign up","Exit"};
 		
 		JLabel lbl1 = new JLabel("Room Messages");
 		JLabel lbl2 = new JLabel("Your Rooms");
 		JLabel lbl3 = new JLabel("Online Users");
-		JLabel lbl4 = new JLabel("");
 		JLabel lbl5 = new JLabel("Users in Room");
-		
-		
-		
-		JPanel logInPanel = new JPanel();
+		JLabel lbl6 = new JLabel("");
 
+		JButton signUpbtn = new JButton("Sign Up");
+		JButton logInbtn = new JButton("Log In");
+		JButton exitbtn = new JButton("Exit");
+	
 		
+		logInPanel.setLayout(new GridLayout(3,3));
 		logInPanel.add(new JLabel("Username:"));
 		logInPanel.add(userNameTxt);
 		logInPanel.add(Box.createHorizontalStrut(15));
-		logInPanel.add(new JLabel("Password: "));
+		logInPanel.add(new JLabel("Password: "));	
 		logInPanel.add(passwordTxt);
-		
-		
+		logInPanel.add(lbl6);
+		logInPanel.add(logInbtn);
+		logInPanel.add(signUpbtn);
+		logInPanel.add(exitbtn);
+					
 		lbl4.setVisible(false);
 		txtMessages = new JTextArea();
 		txtMessages.setEditable(false);
@@ -131,13 +141,19 @@ public class ChatClient extends JFrame implements Runnable
 		JButton btnSend = new JButton("Send");
 		JButton btnCreate = new JButton("Create Room");
 		JButton btnInstruction = new JButton("Instructions");
-		btnInstruction.setActionCommand("Instruction");
+		btnInstruction.setActionCommand("Instruction");		
+		logInbtn.setActionCommand("Log In");
+		exitbtn.setActionCommand("Exit");
+		signUpbtn.setActionCommand("Sign Up");
 		btnSend.setActionCommand("Send");
 		btnCreate.setActionCommand("Create");
 		MyActionListener listener=new MyActionListener();
 		btnSend.addActionListener(listener);
 		btnCreate.addActionListener(listener);
 		btnInstruction.addActionListener(listener);
+		logInbtn.addActionListener(listener);
+		signUpbtn.addActionListener(listener);
+		exitbtn.addActionListener(listener);
 
 
 
@@ -176,25 +192,20 @@ public class ChatClient extends JFrame implements Runnable
 		setVisible(true);
 		
 		
+		JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
-		JOptionPane.showConfirmDialog(null,logInPanel,"Chat Client",JOptionPane.OK_CANCEL_OPTION);
 		
- 		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
-		{
-			JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
-			JOptionPane.showConfirmDialog(null,logInPanel,"Chat Client",JOptionPane.OK_CANCEL_OPTION);
-	
-		}	
-			
-			
+		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+			{
+				JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
-		if (userNameTxt.getText()==null || userNameTxt.getText().equals(""))
-			userNameTxt.setText("Anonymous");
+			}
+		
 		lbl4.setText("Currently connected as: " + userNameTxt.getText());
-		lbl4.setVisible(true);
-		output.println("i "+userNameTxt.getText());
+		lbl4.setVisible(true);		
 		setTitle("Chat Client - "+userNameTxt.getText()+" currently not in any room");
-		active=true;
+		output.println("i "+userNameTxt.getText());
 		Thread readThread=new Thread(this);
 		readThread.start();
 	}
@@ -311,6 +322,9 @@ public class ChatClient extends JFrame implements Runnable
 	{
 		public void	actionPerformed(ActionEvent	e)	
 		{
+			Window w = SwingUtilities.getWindowAncestor(userNameTxt);
+			JPanel signUpPanel = new JPanel();
+			
 			if(e.getActionCommand().equals("Send"))
 			{
 				if (currentRoom==null)
@@ -349,7 +363,16 @@ public class ChatClient extends JFrame implements Runnable
 			else if(e.getActionCommand().equals("Instruction")){
 				JOptionPane.showMessageDialog(null,"Use 'ctrl' key to select multiple users to add to a chat.","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);					
 					return;
-			
+			}
+			else if(e.getActionCommand().equals("Log In")){
+				w.setVisible(false);
+				active=true;
+			}
+			else if(e.getActionCommand().equals("Sign Up")){
+				JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
+			}
+			else if(e.getActionCommand().equals("Exit")){
+				System.exit(0);
 			}
 		}
 	}
