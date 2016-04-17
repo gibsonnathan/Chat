@@ -104,7 +104,7 @@ public class ChatDaemon implements Runnable
 		}
 	}
 
-	public String getUsers(int room){
+	synchronized public String getUsers(int room){
 		ArrayList<Integer> roomids = new ArrayList<Integer>();
 		for(int i = 1; i < rooms[room][0] + 1; i++){
 			roomids.add(rooms[room][i]);
