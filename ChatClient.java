@@ -206,6 +206,7 @@ public class ChatClient extends JFrame implements Runnable
 		lbl4.setVisible(true);		
 		setTitle("Chat Client - "+userNameTxt.getText()+" currently not in any room");
 		output.println("i "+userNameTxt.getText());
+		active=true;
 		Thread readThread=new Thread(this);
 		readThread.start();
 	}
@@ -375,7 +376,7 @@ public class ChatClient extends JFrame implements Runnable
 			}
 			else if(e.getActionCommand().equals("Log In")){
 				w.setVisible(false);
-				active=true;
+				
 			}
 			else if(e.getActionCommand().equals("Sign Up")){
 				JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
