@@ -85,7 +85,10 @@ public class ChatServer implements Runnable
 						daemon.createNewRoom(line);
 						break;
 					case 'x':
-						daemon.shrMsg.put(line);
+						String[] message = line.split(" "); 
+						String result = daemon.getUsers(Integer.parseInt(message[1]));
+						result = "x " + result;
+						nextMsg.put(result);
 						break;
 					default:
 				}
