@@ -362,6 +362,7 @@ public class ChatClient extends JFrame implements Runnable
 				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);
 				if (roomName==null)
 					return;
+				
 				if (roomName=="")
 					roomName="Unnamed";
 
