@@ -290,6 +290,7 @@ public class ChatClient extends JFrame implements Runnable
 						onlineUsers.addElement(t.nextToken());
 					break;
 				case 'x':
+					currentUsersModel.clear();
 					t= new StringTokenizer(line);
 					t.nextToken();
 					while(t.hasMoreTokens()){
@@ -308,7 +309,6 @@ public class ChatClient extends JFrame implements Runnable
 			
 			if(!e.getValueIsAdjusting()){
 				System.out.println("ListListener called");
-				currentUsersModel.clear();
 				Room roomToGo=(Room)lstRooms.getSelectedValue();
 				currentRoom=roomToGo;
 				output.println("x " + currentRoom.roomId);
