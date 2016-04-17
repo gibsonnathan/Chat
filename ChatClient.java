@@ -305,12 +305,16 @@ public class ChatClient extends JFrame implements Runnable
 	{
 		public void	valueChanged(ListSelectionEvent	e)	
 		{
-			Room roomToGo=(Room)lstRooms.getSelectedValue();
-			currentRoom=roomToGo;
-			currentUsersModel.clear();
-			output.println("x " + currentRoom.roomId);
-			txtMessages.setText(roomToGo.message);
-			setTitle("Chat Client - "+ userNameTxt.getText()+" in " + currentRoom.roomName);
+			
+			if(!e.getValueIsAdjusting()){
+				System.out.println("ListListener called");
+				currentUsersModel.clear();
+				Room roomToGo=(Room)lstRooms.getSelectedValue();
+				currentRoom=roomToGo;
+				output.println("x " + currentRoom.roomId);
+				txtMessages.setText(roomToGo.message);
+				setTitle("Chat Client - "+ userNameTxt.getText()+" in " + currentRoom.roomName);
+			}
 		}
 	}
 
@@ -362,7 +366,7 @@ public class ChatClient extends JFrame implements Runnable
 				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);
 				if (roomName==null)
 					return;
-				
+
 				if (roomName=="")
 					roomName="Unnamed";
 
