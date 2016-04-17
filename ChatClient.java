@@ -289,6 +289,13 @@ public class ChatClient extends JFrame implements Runnable
 					while (t.hasMoreTokens())
 						onlineUsers.addElement(t.nextToken());
 					break;
+				case 'x':
+					t= new StringTokenizer(line);
+					t.nextToken();
+					while(t.hasMoreTokens()){
+						currentUsersModel.addElement(t.nextToken());
+					}
+					break;
 				default:
 			}
 		}
@@ -300,8 +307,10 @@ public class ChatClient extends JFrame implements Runnable
 		{
 			Room roomToGo=(Room)lstRooms.getSelectedValue();
 			currentRoom=roomToGo;
+			currentUsersModel.clear();
+			output.println("x " + currentRoom.roomId);
 			txtMessages.setText(roomToGo.message);
-			setTitle("Chat Client - "+userNameTxt.getText()+" in " + currentRoom.roomName);
+			setTitle("Chat Client - "+ userNameTxt.getText()+" in " + currentRoom.roomName);
 		}
 	}
 
@@ -347,8 +356,8 @@ public class ChatClient extends JFrame implements Runnable
 				}
 				String inviteMessage="";
 				for(int i=0;i<selections.length;i++){
-					currentUsersModel.addElement((String)onlineUsers.elementAt(selections[i]));
 					inviteMessage += " "+(String)onlineUsers.elementAt(selections[i]);
+					
 				}
 				String roomName = JOptionPane.showInputDialog(null,"Enter name of the room:","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);
 				if (roomName==null)
