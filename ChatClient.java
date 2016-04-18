@@ -28,64 +28,36 @@ public class ChatClient extends JFrame implements Runnable
 	JTextField txtSend;
 	JTextField userNameTxt = new JTextField(10);
 	JPasswordField passwordTxt = new JPasswordField(10);
-	JTextField signUpUserNameTxt = new JTextField(10);
-	JPasswordField signUpPasswordTxt = new JPasswordField(10);
+	JTextField portNumberTxt = new JTextField(10);
+	JTextField IPAddressTxt = new JTextField(10);
+	JPasswordField signUpPasswordTxt = new JPasswordField(10);	
 	JLabel lbl4 = new JLabel("");
 	JPanel logInPanel = new JPanel();
 
 	boolean active;
+	
+
 
 	
 	public static void main(String[] argv) throws IOException
 	{
-		InetAddress clientAddr= InetAddress.getLocalHost();
-		int portNumber=1666;
-		String host = JOptionPane.showInputDialog(null,"Enter the hostname/IP Address of the server \n and port number seperated by a space","Chat Client",JOptionPane.QUESTION_MESSAGE);
-
-		
-		if (host==null)
-			System.exit(1);
+		InetAddress clientAddr = InetAddress.getLocalHost();
 
 
-		StringTokenizer t=new StringTokenizer(host);
-		do
-		{
-			try 
-			{
-				if (t.hasMoreTokens())
-					clientAddr=InetAddress.getByName(t.nextToken());
-				if (t.hasMoreTokens())
-					portNumber=Integer.parseInt(t.nextToken());
-				break;
-			}
-			catch(Exception e) 
-			{
-				JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		while (true);
-
-		System.out.println("Connecting to Chat Server at "+ clientAddr + "...");
-		ChatClient cc = new ChatClient(clientAddr,portNumber);
+		ChatClient cc = new ChatClient(clientAddr); 
 		cc.pack();
 		cc.setLocation(15,1);
 		cc.setVisible(true);
 	}
 
-	public ChatClient(InetAddress adx,int portNumber)
+	public ChatClient(InetAddress adx)
 	{
+
 		super("Chat Client");
-		try
-		{
-			socket=new Socket(adx,portNumber);
-			input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			output=new PrintStream(socket.getOutputStream());
-		}
-		catch(IOException e)
-		{
-			System.out.println("Could not connect to the server...exiting");;
-			System.exit(-1);
-		}
+	
+		
+
+		int portNumber=1666;
 
 		System.out.println("Connected....starting GUI...");
 
@@ -97,18 +69,28 @@ public class ChatClient extends JFrame implements Runnable
 		JLabel lbl3 = new JLabel("Online Users");
 		JLabel lbl5 = new JLabel("Users in Room");
 		JLabel lbl6 = new JLabel("");
-
+		JLabel lbl7 = new JLabel("IP Address");
+		JLabel lbl8 = new JLabel("Port Number");
+		JLabel lbl9 = new JLabel("");
+		JLabel lbl10 = new JLabel("");
+		
 		JButton signUpbtn = new JButton("Sign Up");
 		JButton logInbtn = new JButton("Log In");
 		JButton exitbtn = new JButton("Exit");
 	
 		
-		logInPanel.setLayout(new GridLayout(3,3));
+		logInPanel.setLayout(new GridLayout(5,3));
 		logInPanel.add(new JLabel("Username:"));
 		logInPanel.add(userNameTxt);
 		logInPanel.add(Box.createHorizontalStrut(15));
 		logInPanel.add(new JLabel("Password: "));	
 		logInPanel.add(passwordTxt);
+		logInPanel.add(lbl9);
+		logInPanel.add(lbl7);
+		logInPanel.add(IPAddressTxt);
+		logInPanel.add(lbl10);
+		logInPanel.add(lbl8);
+		logInPanel.add(portNumberTxt);
 		logInPanel.add(lbl6);
 		logInPanel.add(logInbtn);
 		logInPanel.add(signUpbtn);
@@ -194,6 +176,30 @@ public class ChatClient extends JFrame implements Runnable
 		
 		JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
+		try{		
+			adx = InetAddress.getByName(IPAddressTxt.getText());
+			if (!portNumberTxt.getText().equals("")){
+				portNumber = Integer.parseInt(portNumberTxt.getText());
+			}
+		}catch(Exception e){
+			//JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
+			System.out.println(e);
+		}
+	
+
+		
+		try
+		{
+			socket=new Socket(adx,portNumber);
+			input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output=new PrintStream(socket.getOutputStream());
+		}
+		catch(IOException e)
+		{
+			System.out.println("Could not connect to the server...exiting");;
+			System.exit(-1);
+		}
+		
 		
 		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
 			{
@@ -201,7 +207,7 @@ public class ChatClient extends JFrame implements Runnable
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
 			}
-		
+		System.out.println("Connecting to Chat Server at "+ adx + "...");
 		lbl4.setText("Currently connected as: " + userNameTxt.getText());
 		lbl4.setVisible(true);		
 		setTitle("Chat Client - "+userNameTxt.getText()+" currently not in any room");
@@ -238,7 +244,7 @@ public class ChatClient extends JFrame implements Runnable
 			System.out.println("Client Received:"+line);
 			StringTokenizer t;
 			switch(line.charAt(0))
-			{
+			{ 
 				case 'i': // a user logged in
 					if (!userNameTxt.getText().equals(line.substring(2)))
 					{
@@ -291,6 +297,7 @@ public class ChatClient extends JFrame implements Runnable
 						onlineUsers.addElement(t.nextToken());
 					break;
 				case 'x':
+					currentUsersModel.clear();
 					t= new StringTokenizer(line);
 					t.nextToken();
 					while(t.hasMoreTokens()){
@@ -309,7 +316,6 @@ public class ChatClient extends JFrame implements Runnable
 			
 			if(!e.getValueIsAdjusting()){
 				System.out.println("ListListener called");
-				currentUsersModel.clear();
 				Room roomToGo=(Room)lstRooms.getSelectedValue();
 				currentRoom=roomToGo;
 				output.println("x " + currentRoom.roomId);
