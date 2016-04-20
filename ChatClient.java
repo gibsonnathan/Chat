@@ -58,6 +58,7 @@ public class ChatClient extends JFrame implements Runnable
 		
 
 		int portNumber=1666;
+		boolean loop = true;
 
 		System.out.println("Connected....starting GUI...");
 
@@ -176,17 +177,23 @@ public class ChatClient extends JFrame implements Runnable
 		
 		JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
-		try{		
-			adx = InetAddress.getByName(IPAddressTxt.getText());
-			if (!portNumberTxt.getText().equals("")){
-				portNumber = Integer.parseInt(portNumberTxt.getText());
+		do{
+			try{
+				if(!IPAddressTxt.getText().equals("")){	
+					adx = InetAddress.getByName(IPAddressTxt.getText());
+				}
+				if (!portNumberTxt.getText().equals("")){
+					portNumber = Integer.parseInt(portNumberTxt.getText());
+				}
+				loop = false;
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
+				
+				
+				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			}
-		}catch(Exception e){
-			//JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
-			System.out.println(e);
 		}
-	
-
+		while(loop != true);
 		
 		try
 		{
