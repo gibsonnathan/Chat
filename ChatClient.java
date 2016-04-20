@@ -6,7 +6,7 @@ import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-//changed by josef
+
 public class ChatClient extends JFrame implements Runnable 
 {
 	Socket socket;
@@ -36,9 +36,6 @@ public class ChatClient extends JFrame implements Runnable
 
 	boolean active;
 	
-
-
-	
 	public static void main(String[] argv) throws IOException
 	{
 		InetAddress clientAddr = InetAddress.getLocalHost();
@@ -55,13 +52,10 @@ public class ChatClient extends JFrame implements Runnable
 
 		super("Chat Client");
 	
-		
-
 		int portNumber=1666;
 		boolean loop = true;
 
 		System.out.println("Connected....starting GUI...");
-
 
 		Object[] options = {"Sign In","Sign up","Exit"};
 		
@@ -138,8 +132,6 @@ public class ChatClient extends JFrame implements Runnable
 		signUpbtn.addActionListener(listener);
 		exitbtn.addActionListener(listener);
 
-
-
 		GriddedPanel mainPanel = new GriddedPanel();
 		mainPanel.setBorder( new EmptyBorder( new Insets( 2, 2, 2, 2 ) ) );
         mainPanel.addComponent(lbl1,        1,0,5,1,GridBagConstraints.WEST,GridBagConstraints.NONE);
@@ -174,7 +166,6 @@ public class ChatClient extends JFrame implements Runnable
 		setLocation(500,250);
 		setVisible(true);
 		
-		
 		JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
 		do{
@@ -193,8 +184,12 @@ public class ChatClient extends JFrame implements Runnable
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			}
 		}
+<<<<<<< HEAD
 		while(loop != true);
 		
+=======
+	
+>>>>>>> 32eb8a5cebe143111497decb0faf8b6a013f522a
 		try
 		{
 			socket=new Socket(adx,portNumber);
