@@ -176,7 +176,7 @@ public class ChatClient extends JFrame implements Runnable
 				if (!portNumberTxt.getText().equals("")){
 					portNumber = Integer.parseInt(portNumberTxt.getText());
 				}
-				loop = false;
+				break;
 			}catch(Exception e){
 				JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
 				
@@ -185,7 +185,7 @@ public class ChatClient extends JFrame implements Runnable
 			}
 		}
 
-		while(loop != true);
+		while(true);
 		
 		try
 		{
@@ -200,7 +200,7 @@ public class ChatClient extends JFrame implements Runnable
 		}
 		
 		
-		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+		while( (passwordTxt.getPassword().equals("") || userNameTxt.getText().equals("")))
 			{
 				JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
