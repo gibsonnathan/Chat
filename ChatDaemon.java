@@ -11,6 +11,7 @@ public class ChatDaemon implements Runnable
 	static int numRooms=0;
 	ChatServer[] user;
 	int [][] rooms; // rooms[x][0] is going to give the number of users in room x
+	//HashMap<Integer, ArrayList<ChatServer>> map = new HashMap<Integer, ArrayList<ChatServer>>();  
 	Thread me;
 
 	MessageQueue shrMsg;

@@ -23,6 +23,7 @@ public class ChatServer implements Runnable
 	{
 		socket=s;
 		daemon=d;
+
 		try
 		{
 			input=new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -32,7 +33,6 @@ public class ChatServer implements Runnable
 			writeThread.start();
 			Thread readThread=new Thread(new ReadThread());
 			readThread.start();
-			// client logged off if it comes here
 		}
 		catch(IOException e)
 		{
@@ -58,37 +58,28 @@ public class ChatServer implements Runnable
 	{
 		try
 		{
-			outside:
+			
 			while(running)
 			{
 				String line=input.readLine();
 				System.out.println("Server Received: "+line);
+
 				switch(line.charAt(0))
 				{
 					case 'i': // login
-						daemon.shrMsg.put(line);
-						userName=line.substring(2);
-						String userListMsg="u";
-						for(int i=0;i<daemon.numUsers;i++)
-							if (daemon.user[i].alive())
-								userListMsg+= " "+daemon.user[i].userName;
-						nextMsg.put(userListMsg);
+						login(line);
 						break;
 					case 'o': // logout
-						daemon.shrMsg.put(line);
-						running = false;
-						break outside;
+						logout(line);
+						break;
 					case 'm': // new message
-						daemon.shrMsg.put(line);
+						message(line);
 						break;
 					case 'v': // invite
-						daemon.createNewRoom(line);
+						invite(line);
 						break;
 					case 'x':
-						String[] message = line.split(" "); 
-						String result = daemon.getUsers(Integer.parseInt(message[1]));
-						result = "x " + result;
-						nextMsg.put(result);
+						get_users(line);
 						break;
 					default:
 				}
@@ -115,6 +106,36 @@ public class ChatServer implements Runnable
 				output.println(s);
 			}
 		}
+	}
+
+	void login(String line){
+		daemon.shrMsg.put(line);
+		userName=line.substring(2);
+		String userListMsg="u";
+		for(int i=0;i<daemon.numUsers;i++)
+			if (daemon.user[i].alive())
+				userListMsg+= " "+daemon.user[i].userName;
+		nextMsg.put(userListMsg);
+	}
+
+	void logout(String line){
+		daemon.shrMsg.put(line);
+		running = false;
+	}
+
+	void message(String line){
+		daemon.shrMsg.put(line);
+	}
+
+	void invite(String line){
+		daemon.createNewRoom(line);
+	}
+
+	void get_users(String line){
+		String[] message = line.split(" "); 
+		String result = daemon.getUsers(Integer.parseInt(message[1]));
+		result = "x " + result;
+		nextMsg.put(result);
 	}
 
 }
