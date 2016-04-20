@@ -184,12 +184,9 @@ public class ChatClient extends JFrame implements Runnable
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			}
 		}
-<<<<<<< HEAD
+
 		while(loop != true);
 		
-=======
-	
->>>>>>> 32eb8a5cebe143111497decb0faf8b6a013f522a
 		try
 		{
 			socket=new Socket(adx,portNumber);
