@@ -1,3 +1,11 @@
+// +----------+-------------+------+-----+---------+----------------+
+// | Field    | Type        | Null | Key | Default | Extra          |
+// +----------+-------------+------+-----+---------+----------------+
+// | id       | int(11)     | NO   | PRI | NULL    | auto_increment |
+// | username | varchar(20) | NO   |     | NULL    |                |
+// | password | varchar(20) | NO   |     | NULL    |                |
+// +----------+-------------+------+-----+---------+----------------+
+
 import java.sql.*;   
  
 public class Database {  
