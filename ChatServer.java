@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ChatServer implements Runnable
 {
-	MessageQueue nextMsg=new MessageQueue();
+	MessageQueue nextMsg;
 	Socket socket;
 	ChatDaemon daemon;
 
@@ -21,10 +21,11 @@ public class ChatServer implements Runnable
 
 	public ChatServer(Socket s,ChatDaemon d)
 	{
-		userName="Anonymous";
+		nextMsg = new MessageQueue();
+		userName = "Anonymous";
 		running = false;
-		socket=s;
-		daemon=d;
+		socket = s;
+		daemon = d;
 
 		try
 		{
