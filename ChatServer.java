@@ -11,8 +11,8 @@ public class ChatServer implements Runnable
 	BufferedReader input;
 	PrintStream output;
 
-	String userName="Anonymous";
-	boolean running=false;
+	String userName;
+	boolean running;
 
 	boolean alive()
 	{
@@ -21,6 +21,8 @@ public class ChatServer implements Runnable
 
 	public ChatServer(Socket s,ChatDaemon d)
 	{
+		userName="Anonymous";
+		running = false;
 		socket=s;
 		daemon=d;
 
