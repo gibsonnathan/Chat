@@ -14,6 +14,8 @@ public class ChatServer implements Runnable
 	String userName;
 	boolean running;
 
+	Database database;
+
 	boolean alive()
 	{
 		return running;
@@ -21,6 +23,7 @@ public class ChatServer implements Runnable
 
 	public ChatServer(Socket s,ChatDaemon d)
 	{
+		database = new Database();
 		nextMsg = new MessageQueue();
 		userName = "Anonymous";
 		running = false;
@@ -83,6 +86,15 @@ public class ChatServer implements Runnable
 						break;
 					case 'x':
 						get_users(line);
+						break;
+					case 'p':
+						StringTokenizer t = new StringTokenizer(line);
+						t.nextToken();
+						String user = t.nextToken();
+						String pass = t.nextToken();
+						System.out.println(user + " " + pass);
+						boolean result = database.valid(user, pass);
+						nextMsg.put("p " + user + " " + pass + " " + result);
 						break;
 					default:
 				}

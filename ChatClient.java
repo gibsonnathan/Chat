@@ -47,7 +47,7 @@ public class ChatClient extends JFrame implements Runnable
 		cc.setVisible(true);
 	}
 
-	public ChatClient(InetAddress adx)
+	public ChatClient(InetAddress adx) throws IOException
 	{
 
 		super("Chat Client");
@@ -199,13 +199,38 @@ public class ChatClient extends JFrame implements Runnable
 			System.exit(-1);
 		}
 		
-		
+
 		while( (passwordTxt.getPassword().equals("") || userNameTxt.getText().equals("")))
-			{
+		{
+			JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+	
+		}
+
+		while(true){
+
+			output.println("p " + userNameTxt.getText() + " " + passwordTxt.getText());
+
+			String line=input.readLine();
+			if (line==null)
+				continue;
+
+			System.out.println("Client Received:"+line);
+			StringTokenizer t = new StringTokenizer(line);
+			t.nextToken();
+			String user = t.nextToken();
+			String pass = t.nextToken();
+			String result = t.nextToken();
+
+			if(userNameTxt.getText().equals(user) && passwordTxt.getText().equals(pass) && result.equals("true")){
+				break;
+			}else{
 				JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-		
 			}
+
+		}
+
 		System.out.println("Connecting to Chat Server at "+ adx + "...");
 		lbl4.setText("Currently connected as: " + userNameTxt.getText());
 		lbl4.setVisible(true);		
