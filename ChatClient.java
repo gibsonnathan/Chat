@@ -200,7 +200,7 @@ public class ChatClient extends JFrame implements Runnable
 		}
 		
 
-		while( (passwordTxt.getPassword().equals("") || userNameTxt.getText().equals("")))
+		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
 		{
 			JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
 			JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
@@ -419,7 +419,15 @@ public class ChatClient extends JFrame implements Runnable
 				
 			}
 			else if(e.getActionCommand().equals("Sign Up")){
-				JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
+				//JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
+				while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+				{
+					JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+
+				}
+				output.println("a " + userNameTxt.getText() + " " + passwordTxt.getText());
+
 			}
 			else if(e.getActionCommand().equals("Exit")){
 				System.exit(0);
@@ -427,7 +435,3 @@ public class ChatClient extends JFrame implements Runnable
 		}
 	}
 }
-
-
-
-

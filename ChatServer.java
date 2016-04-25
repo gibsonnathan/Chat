@@ -85,16 +85,13 @@ public class ChatServer implements Runnable
 						invite(line);
 						break;
 					case 'x':
-						get_users(line);
+						get_users(line); //users in room
 						break;
 					case 'p':
-						StringTokenizer t = new StringTokenizer(line);
-						t.nextToken();
-						String user = t.nextToken();
-						String pass = t.nextToken();
-						System.out.println(user + " " + pass);
-						boolean result = database.valid(user, pass);
-						nextMsg.put("p " + user + " " + pass + " " + result);
+						validateUser(line); //check if user/pass is valid
+						break;
+					case 'a':
+						addUser(line);
 						break;
 					default:
 				}
@@ -121,6 +118,24 @@ public class ChatServer implements Runnable
 				output.println(s);
 			}
 		}
+	}
+
+	void addUser(String line){
+		StringTokenizer t = new StringTokenizer(line);
+		t.nextToken();
+		String user = t.nextToken();
+		String pass = t.nextToken();
+		database.addUser(user, pass);
+	}
+
+	void validateUser(String line){
+		StringTokenizer t = new StringTokenizer(line);
+		t.nextToken();
+		String user = t.nextToken();
+		String pass = t.nextToken();
+		System.out.println(user + " " + pass);
+		boolean result = database.valid(user, pass);
+		nextMsg.put("p " + user + " " + pass + " " + result);
 	}
 
 	void login(String line){
