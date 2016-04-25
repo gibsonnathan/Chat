@@ -210,7 +210,12 @@ public class ChatClient extends JFrame implements Runnable
 		while(true){
 
 			output.println("p " + userNameTxt.getText() + " " + passwordTxt.getText());
-
+			try{
+				Thread.sleep(1000);	
+			}catch(InterruptedException e){
+				System.out.println(e);
+			}
+			
 			String line=input.readLine();
 			if (line==null)
 				continue;
@@ -225,7 +230,7 @@ public class ChatClient extends JFrame implements Runnable
 			if(userNameTxt.getText().equals(user) && passwordTxt.getText().equals(pass) && result.equals("true")){
 				break;
 			}else{
-				JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,"Username/Password combo not in DB","Chat Client",JOptionPane.ERROR_MESSAGE);
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			}
 
