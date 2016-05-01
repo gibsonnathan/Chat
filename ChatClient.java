@@ -385,7 +385,8 @@ public class ChatClient extends JFrame implements Runnable
 				System.out.println("Client sent: m "+currentRoom.roomId+" "+txtSend.getText());
 				txtSend.setText("");
 			}
-			else if(e.getActionCommand().equals("Create"))
+			
+			if(e.getActionCommand().equals("Create"))
 			{
 				int[] selections=lstUsers.getSelectedIndices();
 
@@ -410,26 +411,29 @@ public class ChatClient extends JFrame implements Runnable
 				output.println(inviteMessage);
 				System.out.println("Client sent: "+inviteMessage);
 			}
-			else if(e.getActionCommand().equals("Instruction")){
+			
+			if(e.getActionCommand().equals("Instruction")){
 				JOptionPane.showMessageDialog(null,"Use 'ctrl' key to select multiple users to add to a chat.","Chat Client - "+userNameTxt.getText(),JOptionPane.QUESTION_MESSAGE);					
 					return;
 			}
-			else if(e.getActionCommand().equals("Log In")){
+			
+			if(e.getActionCommand().equals("Log In")){
 				w.setVisible(false);
 				
 			}
-			else if(e.getActionCommand().equals("Sign Up")){
+			
+			if(e.getActionCommand().equals("Sign Up")){
 				//JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
-				while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+				if( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
 				{
 					JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
-					JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 
 				}
 				output.println("a " + userNameTxt.getText() + " " + passwordTxt.getText());
 
 			}
-			else if(e.getActionCommand().equals("Exit")){
+
+			if(e.getActionCommand().equals("Exit")){
 				System.exit(0);
 			}
 		}
