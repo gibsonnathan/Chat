@@ -10,7 +10,6 @@ import java.util.*;
 public class ChatClient extends JFrame implements Runnable 
 {
 	Socket socket;
-	int portNumber;
 	
 	Room currentRoom=null;
 	DefaultListModel myRooms = new DefaultListModel();
@@ -18,12 +17,10 @@ public class ChatClient extends JFrame implements Runnable
 	DefaultListModel currentUsersModel = new DefaultListModel();
 	
 	String myPassword;
-	String myUsername;
 
 	BufferedReader input;
 	PrintStream output;
-	InetAddress adx;
-	
+
 	JTextArea txtMessages;
 	JList lstRooms;
 	JList lstUsers;
@@ -50,12 +47,12 @@ public class ChatClient extends JFrame implements Runnable
 		cc.setVisible(true);
 	}
 
-	public ChatClient(InetAddress adx1) throws IOException
+	public ChatClient(InetAddress adx) throws IOException
 	{
-		
+
 		super("Chat Client");
-		adx = adx1;
-		portNumber=1666;
+	
+		int portNumber=1666;
 		boolean loop = true;
 
 		System.out.println("Connected....starting GUI...");
@@ -128,13 +125,11 @@ public class ChatClient extends JFrame implements Runnable
 		btnSend.setActionCommand("Send");
 		btnCreate.setActionCommand("Create");
 		MyActionListener listener=new MyActionListener();
-		MyActionListener1 listener1=new MyActionListener1();
-		
 		btnSend.addActionListener(listener);
 		btnCreate.addActionListener(listener);
 		btnInstruction.addActionListener(listener);
 		logInbtn.addActionListener(listener);
-		signUpbtn.addActionListener(listener1);
+		signUpbtn.addActionListener(listener);
 		exitbtn.addActionListener(listener);
 
 		GriddedPanel mainPanel = new GriddedPanel();
@@ -173,10 +168,39 @@ public class ChatClient extends JFrame implements Runnable
 		
 		JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 		
+		do{
+			try{
+				if(!IPAddressTxt.getText().equals("")){	
+					adx = InetAddress.getByName(IPAddressTxt.getText());
+				}
+				if (!portNumberTxt.getText().equals("")){
+					portNumber = Integer.parseInt(portNumberTxt.getText());
+				}
+				break;
+			}catch(Exception e){
+				JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
+				
+				
+				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+			}
+		}
+
+		while(true);
 		
+		try
+		{
+			socket=new Socket(adx,portNumber);
+			input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output=new PrintStream(socket.getOutputStream());
+		}
+		catch(IOException e)
+		{
+			System.out.println("Could not connect to the server...exiting");;
+			System.exit(-1);
+		}
 		
 
-		while( passwordTxt.getText().equals("") || userNameTxt.getText().equals(""))
+		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
 		{
 			JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
 			JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
@@ -194,10 +218,8 @@ public class ChatClient extends JFrame implements Runnable
 			
 			String line=input.readLine();
 			if (line==null)
-			{
-				System.out.println("ERROR");
 				continue;
-			}
+
 			System.out.println("Client Received:"+line);
 			StringTokenizer t = new StringTokenizer(line);
 			t.nextToken();
@@ -266,10 +288,6 @@ public class ChatClient extends JFrame implements Runnable
 							onlineUsers.removeElementAt(i);
 							break;
 						}
-						for(int i=0;i<myRooms.size();i++){
-							
-						}
-					
 					JOptionPane.showMessageDialog(null,line.substring(2) + " logged out","Chat Client - " + userNameTxt.getText(),JOptionPane.INFORMATION_MESSAGE);
 					break;
 				case 'm': // new message
@@ -349,8 +367,6 @@ public class ChatClient extends JFrame implements Runnable
 	}
 	
 	
-	
-	
 	class MyActionListener implements ActionListener
 	{
 		public void	actionPerformed(ActionEvent	e)	
@@ -399,198 +415,23 @@ public class ChatClient extends JFrame implements Runnable
 					return;
 			}
 			else if(e.getActionCommand().equals("Log In")){
-				do
-				{
-					try
-					{
-								
-						if(!IPAddressTxt.getText().equals("")){	
-							adx = InetAddress.getByName(IPAddressTxt.getText());
-						}
-						if (!portNumberTxt.getText().equals("")){
-							portNumber = Integer.parseInt(portNumberTxt.getText());
-						}
-					
-					}catch(Exception q){
-						JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);	
-						JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-					}
-					try
-					{
-						if(!userNameTxt.getText().equals(""))
-						{
-							myUsername = userNameTxt.getText();
-							
-						}
-						
-						if(!passwordTxt.getPassword().equals(""))
-						{
-							char[] pass = passwordTxt.getPassword();
-							myPassword = new String(pass);
-							myPassword = passwordTxt.getText();
-							
-						}	
-						break;
-					}catch(Exception q)
-					{
-						JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
-						
-						
-						JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-					}
-				}while(true);
-		
-				try
-				{
-					if(socket == null)
-					{
-					socket=new Socket(adx,portNumber);
-					input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					output=new PrintStream(socket.getOutputStream());
-					//System.out.println("Ouputmade");
-					}
-				}
-				catch(IOException r)
-				{
-					System.out.println("Could not connect to the server...exiting");;
-					System.exit(-1);
-				}
 				w.setVisible(false);
 				
+			}
+			else if(e.getActionCommand().equals("Sign Up")){
+				//JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
+				while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+				{
+					JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
+
+				}
+				output.println("a " + userNameTxt.getText() + " " + passwordTxt.getText());
+
 			}
 			else if(e.getActionCommand().equals("Exit")){
 				System.exit(0);
 			}
 		}
 	}
-	
-	//ayyyyyyyy
-	class MyActionListener1 implements ActionListener
-	{
-		public void	actionPerformed(ActionEvent	e)	
-		{
-			if(e.getActionCommand().equals("Sign Up"))
-			{
-				do
-				{
-					try
-					{
-								
-						if(!IPAddressTxt.getText().equals("")){	
-							adx = InetAddress.getByName(IPAddressTxt.getText());
-						}
-						if (!portNumberTxt.getText().equals("")){
-							portNumber = Integer.parseInt(portNumberTxt.getText());
-						}
-					
-					}catch(Exception q){
-						JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);	
-						JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-					}
-					try
-					{
-						if(!userNameTxt.getText().equals(""))
-						{
-							myUsername = userNameTxt.getText();
-							
-						}
-						
-						if(!passwordTxt.getPassword().equals(""))
-						{
-							char[] pass = passwordTxt.getPassword();
-							myPassword = new String(pass);
-							myPassword = passwordTxt.getText();
-							
-						}	
-						break;
-					}catch(Exception q)
-					{
-						JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
-						
-						
-						JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-					}
-				}while(true);
-		
-		try
-		{
-			if(socket == null){
-			socket=new Socket(adx,portNumber);
-			input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			output=new PrintStream(socket.getOutputStream());
-			System.out.println("Ouputmade");
-			}
-		}
-		catch(IOException r)
-		{
-			System.out.println("Could not connect to the server...exiting");;
-			System.exit(-1);
-		}
-				//JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
-				/*while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
-				{
-					JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
-					//JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
-*/
-				try{
-					String signUp= "a "+ myUsername + " " + myPassword;
-					System.out.println(signUp);
-					
-					output.println(signUp);
-				}
-				catch(NullPointerException c){
-					System.out.println("wtf");
-				}
-			}
-		}
-	}
-
-	class GriddedPanel extends JPanel
-	{
-		private GridBagConstraints constraints;
-		public GriddedPanel()
-		{
-			this( new Insets( 2, 2, 2, 2 ) );
-		}
-		public GriddedPanel( Insets insets )
-		{
-			super( new GridBagLayout() );
-			constraints = new GridBagConstraints();
-			constraints.insets = insets;
-		}
-		public void addComponent( JComponent component, int row, int col,
-								  int width, int height, int anchor, int fill )
-		{
-		   constraints.gridx = col;
-		   constraints.gridy = row;
-		   constraints.gridwidth = width;
-		   constraints.gridheight = height;
-		   constraints.anchor = anchor;
-		   switch( fill )
-		   {
-			   case GridBagConstraints.HORIZONTAL:
-				   constraints.weightx = 1.0;
-				   constraints.weighty = 0.0;
-				   break;
-			   case GridBagConstraints.VERTICAL:
-				   constraints.weighty = 1.0;
-				   constraints.weightx = 0.0;
-				   break;
-			   case GridBagConstraints.BOTH:
-				   constraints.weightx = 1.0;
-				   constraints.weighty = 1.0;
-				   break;
-			   case GridBagConstraints.NONE:
-					constraints.weightx = 0.0;
-					constraints.weighty = 0.0;
-					break;
-			   default:
-				   break;
-		   }
-		   
-		   constraints.fill = fill;
-		   add( component, constraints );
-		}
-	}
 }
-	

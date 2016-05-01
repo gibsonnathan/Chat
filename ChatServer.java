@@ -133,9 +133,9 @@ public class ChatServer implements Runnable
 		t.nextToken();
 		String user = t.nextToken();
 		String pass = t.nextToken();
-		System.out.println(user + " " + pass);
 		boolean result = database.valid(user, pass);
 		nextMsg.put("p " + user + " " + pass + " " + result);
+	
 	}
 
 	void login(String line){
