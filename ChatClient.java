@@ -179,6 +179,8 @@ public class ChatClient extends JFrame implements Runnable
 				break;
 			}catch(Exception e){
 				JOptionPane.showMessageDialog(null,"Invalid input. Please try again", "Chat Client", JOptionPane.ERROR_MESSAGE);
+				
+				
 				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			}
 		}
@@ -205,14 +207,6 @@ public class ChatClient extends JFrame implements Runnable
 	
 		}
 
-		login();
-
-		active=true;
-		Thread readThread=new Thread(this);
-		readThread.start();
-	}
-
-	public void login(){
 		while(true){
 
 			output.println("p " + userNameTxt.getText() + " " + passwordTxt.getText());
@@ -221,11 +215,8 @@ public class ChatClient extends JFrame implements Runnable
 			}catch(InterruptedException e){
 				System.out.println(e);
 			}
-			String line = "";
-			try{ line=input.readLine(); }
-			catch(IOException e){
-				System.out.println(e);
-			}
+			
+			String line=input.readLine();
 			if (line==null)
 				continue;
 
@@ -240,15 +231,19 @@ public class ChatClient extends JFrame implements Runnable
 				break;
 			}else{
 				JOptionPane.showMessageDialog(null,"Username/Password combo not in DB","Chat Client",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 			}
 
 		}
 
-		//System.out.println("Connecting to Chat Server at "+ adx + "...");
+		System.out.println("Connecting to Chat Server at "+ adx + "...");
 		lbl4.setText("Currently connected as: " + userNameTxt.getText());
 		lbl4.setVisible(true);		
 		setTitle("Chat Client - "+userNameTxt.getText()+" currently not in any room");
 		output.println("i "+userNameTxt.getText());
+		active=true;
+		Thread readThread=new Thread(this);
+		readThread.start();
 	}
 
 	public void run()
@@ -378,17 +373,6 @@ public class ChatClient extends JFrame implements Runnable
 		{
 			Window w = SwingUtilities.getWindowAncestor(userNameTxt);
 			JPanel signUpPanel = new JPanel();
-
-			if(e.getActionCommand().equals("Sign Up")){
-
-				if( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
-				{
-					JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
-
-				}else{
-					output.println("a " + "userNameTxt.getText()" + " " + "passwordTxt.getText()");
-				}
-			}
 			
 			if(e.getActionCommand().equals("Send"))
 			{
@@ -401,8 +385,6 @@ public class ChatClient extends JFrame implements Runnable
 				System.out.println("Client sent: m "+currentRoom.roomId+" "+txtSend.getText());
 				txtSend.setText("");
 			}
-
-			
 			
 			if(e.getActionCommand().equals("Create"))
 			{
@@ -440,6 +422,16 @@ public class ChatClient extends JFrame implements Runnable
 				
 			}
 			
+			if(e.getActionCommand().equals("Sign Up")){
+				//JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
+				if( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
+				{
+					JOptionPane.showMessageDialog(null,"Please enter a username and password ","Chat Client",JOptionPane.ERROR_MESSAGE);
+
+				}
+				output.println("a " + userNameTxt.getText() + " " + passwordTxt.getText());
+
+			}
 
 			if(e.getActionCommand().equals("Exit")){
 				System.exit(0);
