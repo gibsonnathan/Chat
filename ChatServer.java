@@ -68,6 +68,9 @@ public class ChatServer implements Runnable
 			while(running)
 			{
 				String line=input.readLine();
+				if(line == null){
+					continue;
+				}
 				System.out.println("Server Received: "+line);
 
 				switch(line.charAt(0))

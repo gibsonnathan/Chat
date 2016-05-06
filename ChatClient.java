@@ -322,8 +322,9 @@ public class ChatClient extends JFrame implements Runnable
 				case 'u': // user list
 					t= new StringTokenizer(line);
 					t.nextToken(); // to move across command
-					while (t.hasMoreTokens())
+					while (t.hasMoreTokens()){
 						onlineUsers.addElement(t.nextToken());
+					}
 					break;
 				case 'x':
 					currentUsersModel.clear();
