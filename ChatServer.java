@@ -4,17 +4,15 @@ import java.util.*;
 
 public class ChatServer implements Runnable
 {
-	MessageQueue nextMsg;
+	MessageQueue nextMsg=new MessageQueue();
 	Socket socket;
 	ChatDaemon daemon;
 
 	BufferedReader input;
 	PrintStream output;
 
-	String userName;
-	boolean running;
-
-	Database database;
+	String userName="Anonymous";
+	boolean running=false;
 
 	boolean alive()
 	{
@@ -23,12 +21,8 @@ public class ChatServer implements Runnable
 
 	public ChatServer(Socket s,ChatDaemon d)
 	{
-		database = new Database();
-		nextMsg = new MessageQueue();
-		userName = "Anonymous";
-		running = false;
-		socket = s;
-		daemon = d;
+		socket=s;
+		daemon=d;
 
 		try
 		{
@@ -85,13 +79,7 @@ public class ChatServer implements Runnable
 						invite(line);
 						break;
 					case 'x':
-						get_users(line); //users in room
-						break;
-					case 'p':
-						validateUser(line); //check if user/pass is valid
-						break;
-					case 'a':
-						addUser(line);
+						get_users(line);
 						break;
 					default:
 				}
@@ -118,24 +106,6 @@ public class ChatServer implements Runnable
 				output.println(s);
 			}
 		}
-	}
-
-	void addUser(String line){
-		StringTokenizer t = new StringTokenizer(line);
-		t.nextToken();
-		String user = t.nextToken();
-		String pass = t.nextToken();
-		database.addUser(user, pass);
-	}
-
-	void validateUser(String line){
-		StringTokenizer t = new StringTokenizer(line);
-		t.nextToken();
-		String user = t.nextToken();
-		String pass = t.nextToken();
-		boolean result = database.valid(user, pass);
-		nextMsg.put("p " + user + " " + pass + " " + result);
-	
 	}
 
 	void login(String line){
