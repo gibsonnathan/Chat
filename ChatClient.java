@@ -70,6 +70,7 @@ public class ChatClient extends JFrame implements Runnable
 		JLabel lbl10 = new JLabel("");
 		
 		JButton signUpbtn = new JButton("Sign Up");
+		signUpbtn.setEnabled(false);
 		JButton logInbtn = new JButton("Log In");
 		JButton exitbtn = new JButton("Exit");
 	
@@ -394,9 +395,9 @@ public class ChatClient extends JFrame implements Runnable
 				w.setVisible(false);
 				
 			}
-			else if(e.getActionCommand().equals("Sign Up")){
-				JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
-			}
+			//else if(e.getActionCommand().equals("Sign Up")){
+			//	JOptionPane.showMessageDialog(null,"Your username has been created.","Chat Client",JOptionPane.INFORMATION_MESSAGE);
+			//}
 			else if(e.getActionCommand().equals("Exit")){
 				System.exit(0);
 			}
