@@ -187,6 +187,18 @@ public class ChatClient extends JFrame implements Runnable
 
 		while(true);
 		
+		try
+		{
+			socket=new Socket(adx,portNumber);
+			input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output=new PrintStream(socket.getOutputStream());
+		}
+		catch(IOException e)
+		{
+			System.out.println("Could not connect to the server...exiting");;
+			System.exit(-1);
+		}
+		
 
 		while( (passwordTxt.getText().equals("") || userNameTxt.getText().equals("")))
 		{
@@ -317,11 +329,9 @@ public class ChatClient extends JFrame implements Runnable
 					currentUsersModel.clear();
 					t= new StringTokenizer(line);
 					t.nextToken();
-                    while (t.hasMoreTokens()){
-                            onlineUsers.addElement(t.nextToken());
-                        }
-                    }
-
+					while(t.hasMoreTokens()){
+						currentUsersModel.addElement(t.nextToken());
+					}
 					break;
 				default:
 			}
@@ -405,20 +415,7 @@ public class ChatClient extends JFrame implements Runnable
 					return;
 			}
 			else if(e.getActionCommand().equals("Log In")){
-                if(socket == null){
-                    try
-                    {
-                        socket=new Socket(adx,portNumber);
-                        input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        output=new PrintStream(socket.getOutputStream());
-                    }
-                    catch(IOException e)
-                    {
-                        System.out.println("Could not connect to the server...exiting");;
-                        System.exit(-1);
-                    }
-                }
-                w.setVisible(false);
+				w.setVisible(false);
 				
 			}
 			else if(e.getActionCommand().equals("Sign Up")){
@@ -429,20 +426,6 @@ public class ChatClient extends JFrame implements Runnable
 					JOptionPane.showOptionDialog(null,logInPanel,"Chat Client",JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE, null, new Object[]{}, null);
 
 				}
-                
-                if(socket == null){
-                    try
-                    {
-                        socket=new Socket(adx,portNumber);
-                        input =new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                        output=new PrintStream(socket.getOutputStream());
-                    }
-                    catch(IOException e)
-                    {
-                        System.out.println("Could not connect to the server...exiting");;
-                        System.exit(-1);
-                    }
-                }
 				output.println("a " + userNameTxt.getText() + " " + passwordTxt.getText());
 
 			}
