@@ -10,8 +10,7 @@ public class ChatDaemon implements Runnable
 	static int numUsers=0;
 	static int numRooms=0;
 	ChatServer[] user;
-	int [][] rooms; // rooms[x][0] is going to give the number of users in room x
-	//HashMap<Integer, ArrayList<ChatServer>> map = new HashMap<Integer, ArrayList<ChatServer>>();  
+	int [][] rooms; 
 	Thread me;
 
 	MessageQueue shrMsg;
@@ -86,7 +85,7 @@ public class ChatDaemon implements Runnable
 				try {
 					roomid=Integer.parseInt(t.nextToken());
 					for (int i=1;i<=rooms[roomid][0];i++)
-						if (/*rooms[roomid][i] != -1 && */user[rooms[roomid][i]].alive())
+						if (user[rooms[roomid][i]].alive())
 							user[rooms[roomid][i]].nextMsg.put(mes);
 				} catch (Exception e) 
 				{
@@ -120,7 +119,7 @@ public class ChatDaemon implements Runnable
 	synchronized public void createNewRoom(String mes)
 	{
 		StringTokenizer t= new StringTokenizer(mes);
-		t.nextToken(); // to move across command
+		t.nextToken(); 
 		if (numRooms==maxRooms)
 			return;
 		String roomName=t.nextToken();
