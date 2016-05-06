@@ -70,6 +70,7 @@ public class ChatClient extends JFrame implements Runnable
 		JLabel lbl10 = new JLabel("");
 		
 		JButton signUpbtn = new JButton("Sign Up");
+		signUpbtn.setEnabled(false);
 		JButton logInbtn = new JButton("Log In");
 		JButton exitbtn = new JButton("Exit");
 	
